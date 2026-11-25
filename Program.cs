@@ -30,7 +30,7 @@ class Program
                         break;
 
                     case 2:
-                        Console.WriteLine("Edit feature is not available yet.");
+                        EditStudent(phonebook);
                         break;
 
                     case 3:
@@ -148,6 +148,145 @@ static void StoreStudent(Phonebook phonebook)
         }
     }
 }
+
+
+static void EditStudent(Phonebook phonebook)
+{
+    Console.WriteLine("\n===== EDIT STUDENT =====");
+
+    Console.Write("Enter student number: ");
+    string studentNumber = Console.ReadLine() ?? "";
+
+    // Find the student
+    Student? student = phonebook.FindStudent(studentNumber);
+
+    // Check if student exists
+    if (student == null)
+    {
+        Console.WriteLine("Student not found!");
+        return;
+    }
+
+    // Keep showing the edit menu
+    int choice = 0;
+
+    while (choice != 8)
+    {
+        Console.WriteLine("\nHere is the existing information:");
+        Console.WriteLine("Student Number: " + student.StudentNumber);
+        student.DisplayInfo();
+
+        Console.WriteLine("\nWhich information do you wish to change?");
+        Console.WriteLine("[1] Student number");
+        Console.WriteLine("[2] Surname");
+        Console.WriteLine("[3] Gender");
+        Console.WriteLine("[4] Occupation");
+        Console.WriteLine("[5] Country code");
+        Console.WriteLine("[6] Area code");
+        Console.WriteLine("[7] Phone number");
+        Console.WriteLine("[8] None - Go back to main menu");
+
+        Console.Write("Enter choice: ");
+
+        if (!int.TryParse(Console.ReadLine(), out choice))
+        {
+            Console.WriteLine("Invalid choice!");
+            choice = 0;
+            continue;
+        }
+
+        switch (choice)
+        {
+            case 1:
+                Console.Write("Enter new student number: ");
+                student.StudentNumber = Console.ReadLine() ?? "";
+                break;
+
+            case 2:
+                Console.Write("Enter new surname: ");
+                student.Surname = Console.ReadLine() ?? "";
+                break;
+
+            case 3:
+                string gender;
+
+                do
+                {
+                    Console.Write("Enter new gender (M/F): ");
+                    gender = (Console.ReadLine() ?? "").ToUpper();
+
+                    if (gender != "M" && gender != "F")
+                    {
+                        Console.WriteLine("Invalid gender!");
+                    }
+
+                } while (gender != "M" && gender != "F");
+
+                student.Gender = gender;
+                break;
+
+            case 4:
+                Console.Write("Enter new occupation: ");
+                student.Occupation = Console.ReadLine() ?? "";
+                break;
+
+            case 5:
+                int newCountryCode;
+
+                while (true)
+                {
+                    Console.Write("Enter new country code: ");
+
+                    if (int.TryParse(Console.ReadLine(), out newCountryCode) &&
+                        (newCountryCode == 60 ||
+                         newCountryCode == 62 ||
+                         newCountryCode == 63 ||
+                         newCountryCode == 65 ||
+                         newCountryCode == 66))
+                    {
+                        break;
+                    }
+
+                    Console.WriteLine("Invalid country code! Try again.");
+                }
+
+                student.CountryCode = newCountryCode;
+                break;
+
+            case 6:
+                int newAreaCode;
+
+                Console.Write("Enter new area code: ");
+
+                while (!int.TryParse(Console.ReadLine(), out newAreaCode))
+                {
+                    Console.Write("Invalid area code. Enter again: ");
+                }
+
+                student.AreaCode = newAreaCode;
+                break;
+
+            case 7:
+                Console.Write("Enter new phone number: ");
+                student.PhoneNumber = Console.ReadLine() ?? "";
+                break;
+
+            case 8:
+                Console.WriteLine("Returning to main menu...");
+                break;
+
+            default:
+                Console.WriteLine("Invalid choice! Please try again.");
+                break;
+        }
+
+        if (choice >= 1 && choice <= 7)
+        {
+            Console.WriteLine("\nInformation successfully updated!");
+        }
+    }
+}
+
 
 }
 

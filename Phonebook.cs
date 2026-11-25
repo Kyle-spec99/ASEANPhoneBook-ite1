@@ -36,4 +36,33 @@ public class Phonebook
             student.DisplayInfo();
         }
     }
+
+
+public List<Student> SearchByCountries(
+    List<int> countryCodes, bool allCountries)
+{
+    // Create a list for the search results
+    List<Student> results = new List<Student>();
+
+    // Check every student in the phonebook
+    foreach (Student student in students)
+    {
+        if (allCountries || countryCodes.Contains(student.CountryCode))
+        {
+            results.Add(student);
+        }
+    }
+
+    // Arrange students alphabetically by surname
+    results.Sort((a, b) =>
+        string.Compare(
+            a.Surname,
+            b.Surname,
+            StringComparison.OrdinalIgnoreCase
+        )
+    );
+
+    return results;
+}
+
 }

@@ -34,7 +34,7 @@ class Program
                         break;
 
                     case 3:
-                        Console.WriteLine("Search feature is not available yet.");
+                        SearchStudents(phonebook);
                         break;
 
                     case 4:
@@ -286,6 +286,111 @@ static void EditStudent(Phonebook phonebook)
         }
     }
 }
+
+
+static void SearchStudents(Phonebook phonebook)
+{
+    List<int> selectedCountries = new List<int>();
+    List<string> countryNames = new List<string>();
+
+    bool allCountries = false;
+    int choice = -1;
+
+    Console.WriteLine("\n===== SEARCH BY COUNTRY =====");
+    Console.WriteLine("From which country:");
+    Console.WriteLine("[1] Philippines");
+    Console.WriteLine("[2] Thailand");
+    Console.WriteLine("[3] Singapore");
+    Console.WriteLine("[4] Indonesia");
+    Console.WriteLine("[5] Malaysia");
+    Console.WriteLine("[6] ALL");
+    Console.WriteLine("[0] No More");
+
+    while (choice != 0 && !allCountries)
+    {
+        Console.Write("Enter choice: ");
+
+        if (!int.TryParse(Console.ReadLine(), out choice))
+        {
+            Console.WriteLine("Invalid choice!");
+            choice = -1;
+            continue;
+        }
+
+        switch (choice)
+        {
+            case 1:
+                selectedCountries.Add(63);
+                countryNames.Add("Philippines");
+                break;
+
+            case 2:
+                selectedCountries.Add(66);
+                countryNames.Add("Thailand");
+                break;
+
+            case 3:
+                selectedCountries.Add(65);
+                countryNames.Add("Singapore");
+                break;
+
+            case 4:
+                selectedCountries.Add(62);
+                countryNames.Add("Indonesia");
+                break;
+
+            case 5:
+                selectedCountries.Add(60);
+                countryNames.Add("Malaysia");
+                break;
+
+            case 6:
+                allCountries = true;
+                countryNames.Clear();
+                countryNames.Add("ALL COUNTRIES");
+                break;
+
+            case 0:
+                break;
+
+            default:
+                Console.WriteLine("Invalid choice!");
+                break;
+        }
+    }
+
+    if (selectedCountries.Count == 0 && !allCountries)
+    {
+        Console.WriteLine("No countries selected.");
+        return;
+    }
+
+    // Get the matching students
+    List<Student> results =
+        phonebook.SearchByCountries(selectedCountries, allCountries);
+
+    Console.WriteLine("\nHere are the students from " +
+        string.Join(" and ", countryNames) + ":");
+
+    if (results.Count == 0)
+    {
+        Console.WriteLine("No students found.");
+    }
+    else
+    {
+        foreach (Student student in results)
+        {
+            Console.WriteLine(
+                $"{student.Surname}, {student.FirstName}, " +
+                $"with student number {student.StudentNumber}, " +
+                $"is a {student.Occupation}. " +
+                $"His/Her phone number is " +
+                $"{student.CountryCode}-{student.AreaCode}-{student.PhoneNumber}"
+            );
+        }
+    }
+}
+
 
 
 }
